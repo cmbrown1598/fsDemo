@@ -40,19 +40,22 @@ let parseGame str =
         None
     
 let getStandingsFromGame game = 
+    let home = { Team = game.HomeTeam; Wins = 0; Losses = 0; Ties = 0 }
+    let away =  { Team = game.VisitingTeam; Wins = 0; Losses = 0; Ties = 0 }
+    
     match game.VisitorsScore - game.HomeScore with 
     | 0 ->  [
-                { Team = game.HomeTeam; Wins = 0; Losses = 0; Ties = 1 }
-                { Team = game.VisitingTeam; Wins = 0; Losses = 0; Ties = 1 }
+                { home with Ties = 1 }
+                { away with Ties = 1 }
             ] 
     | n when n > 0 
         ->  [
-                { Team = game.HomeTeam; Wins = 0; Losses = 1; Ties = 0 }
-                { Team = game.VisitingTeam; Wins = 1; Losses = 0; Ties = 0 }
+                { home with Losses = 1 }
+                { away with Wins = 1  }
             ] 
     | _ ->  [
-                { Team = game.HomeTeam; Wins = 1; Losses = 0; Ties = 0 }
-                { Team = game.VisitingTeam; Wins = 0; Losses = 1; Ties = 0 }
+                { home with Wins = 1 }
+                { away with Losses = 1 }
             ] 
 
 let combineStandingsLines s1 s2 = 
@@ -81,10 +84,11 @@ let rec sumLists list list2 =
     | x::xs -> sumLists (addToList x list) xs
     
 let standingsVal s = 
-    ((float s.Wins * 1.0) + (float s.Losses * -1.0) + (float s.Ties) * 0.5) * -1.0
+    ((s.Wins * 2) + (s.Losses * -2) + s.Ties) * -1
     
 let getCompleteStandings games = 
-    List.map getStandingsFromGame games |> 
+    games |>
+        List.map getStandingsFromGame |> 
         List.reduce sumLists |>
         List.sortBy standingsVal
 

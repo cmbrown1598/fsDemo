@@ -8,7 +8,7 @@ type Division =
 type Game = { Id: int; HomeTeam: string; HomeScore: int; VisitingTeam: string; VisitorsScore: int }
 type StandingsLine = { Team: string; Wins: int; Losses: int; Ties: int }
 
-let divisionToCalendarMap =
+let divisionToCalendarUrlMap =
     Map.empty.
         Add(Rookies, "https://calendar.google.com/calendar/ical/ngssa.org_84gvlulr7vsnssbr0sqil5gpio%40group.calendar.google.com/public/full.ics").
         Add(Minors, "https://calendar.google.com/calendar/ical/ngssa.org_fffr1344s7f91bfj6bvr8qt82o%40group.calendar.google.com/public/full.ics").
@@ -93,9 +93,10 @@ let getCompleteStandings games =
         List.sortBy standingsVal
 
 let showStandings division = 
-    let games = downloadCalendar divisionToCalendarMap.[division]
+    let games = downloadCalendar divisionToCalendarUrlMap.[division]
                     |> Array.map parseGame
                     |> Array.filter (fun opt -> opt <> None)
                     |> Array.map Option.get
                     |> List.ofArray 
     getCompleteStandings games
+

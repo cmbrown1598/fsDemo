@@ -100,3 +100,23 @@ let showStandings division =
                     |> List.ofArray 
     getCompleteStandings games
 
+let renderHtml orderedStandingsList = 
+    let now = DateTime.Now.ToShortDateString()
+    let header = sprintf "<p>Standings last updated as of %s</p>" now
+    let footer = "<h2>NGSSA. Building confidence in girls since 1971.</h2>"
+    let tableStart = """<table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Team</th>
+                                <th class="rteright">W / L / T</th>
+                            </tr>
+                        </thead>
+                        <tbody>"""
+    let tableFinish = """</tbody>
+                    </table>"""
+    let tableBody, _ = List.fold (fun acc m -> 
+                                    let a, b = acc
+                                    (a + sprintf """<tr><td>%i</td><td>%s</td><td class="rteright">%i / %i / %i</td></tr>""" b m.Team m.Wins m.Losses m.Ties, b + 1)
+                              ) ("", 1) orderedStandingsList
+    header + tableStart + tableBody + tableFinish + footer

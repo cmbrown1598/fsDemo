@@ -39,7 +39,7 @@ let parseGame str =
     else
         None
     
-let getStandingsFromGame game = 
+let getStandingsLinesFromGame game = 
     let home = { Team = game.HomeTeam; Wins = 0; Losses = 0; Ties = 0 }
     let away =  { Team = game.VisitingTeam; Wins = 0; Losses = 0; Ties = 0 }
     
@@ -68,28 +68,28 @@ let combineStandingsLines s1 s2 =
         failwith "Teams not the same."
 
 
-let rec addToList standingsLine standingsList = 
+let rec addStandingsLineToList standingsLine standingsList = 
     match standingsList with
     | [] -> [standingsLine]
     | x::xs when (standingsLine.Team = x.Team) -> 
         let newLine = combineStandingsLines x standingsLine
         newLine::xs
     | x::xs ->
-        let newList = addToList standingsLine xs
+        let newList = addStandingsLineToList standingsLine xs
         x::newList
 
-let rec sumLists list list2 = 
+let rec combineLists list list2 = 
     match list2 with
     | [] -> list
-    | x::xs -> sumLists (addToList x list) xs
+    | standingsLine::remainderOfList -> combineLists (addStandingsLineToList standingsLine list) remainderOfList
     
 let standingsVal s = 
     ((s.Wins * 2) + (s.Losses * -2) + s.Ties) * -1
     
 let getCompleteStandings games = 
     games |>
-        List.map getStandingsFromGame |> 
-        List.reduce sumLists |>
+        List.map getStandingsLinesFromGame |> 
+        List.reduce combineLists |>
         List.sortBy standingsVal
 
 let showStandings division = 
@@ -103,20 +103,10 @@ let showStandings division =
 let renderHtml orderedStandingsList = 
     let now = DateTime.Now.ToShortDateString()
     let header = sprintf "<p>Standings last updated as of %s</p>" now
-    let footer = "<h2>NGSSA. Building confidence in girls since 1971.</h2>"
-    let tableStart = """<table>
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Team</th>
-                                <th class="rteright">W / L / T</th>
-                            </tr>
-                        </thead>
-                        <tbody>"""
-    let tableFinish = """</tbody>
-                    </table>"""
+    let tableStart = """<table><thead><tr><th>Rank</th><th>Team</th><th class="rteright">W / L / T</th></tr></thead><tbody>"""
+    let tableFinish = """</tbody></table><h2>NGSSA. Building confidence in girls since 1971.</h2>"""
     let tableBody, _ = List.fold (fun acc m -> 
                                     let a, b = acc
                                     (a + sprintf """<tr><td>%i</td><td>%s</td><td class="rteright">%i / %i / %i</td></tr>""" b m.Team m.Wins m.Losses m.Ties, b + 1)
                               ) ("", 1) orderedStandingsList
-    header + tableStart + tableBody + tableFinish + footer
+    header + tableStart + tableBody + tableFinish

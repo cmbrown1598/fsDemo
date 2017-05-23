@@ -8,6 +8,11 @@ type Division =
 type Game = { Id: int; HomeTeam: string; HomeScore: int; VisitingTeam: string; VisitorsScore: int }
 type StandingsLine = { Team: string; Wins: int; Losses: int; Ties: int }
 
+
+
+
+
+
 let divisionToCalendarUrlMap =
     Map.empty.
         Add(Rookies, "https://calendar.google.com/calendar/ical/ngssa.org_84gvlulr7vsnssbr0sqil5gpio%40group.calendar.google.com/public/full.ics").
@@ -25,6 +30,8 @@ let downloadCalendar (url : string) =
     use m = new WebClient()
     let results = m.DownloadString (url)
     results.Split (Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+
+    
 let parseGame str = 
     let reg = Regex(@"SUMMARY:Game #(\d{3}) \-? ?(\w+) \((\d+)\+?\) vs (\w+) \((\d+)\+?\)")
     let vk = reg.IsMatch str

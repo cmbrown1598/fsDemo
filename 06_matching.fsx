@@ -6,7 +6,10 @@ let greet name =
 
 
 
-
+let listLength list = 
+    match list with 
+    | [] -> 0
+    | [a] -> 1
 
 
 
@@ -19,3 +22,21 @@ let length list =
         | head::tail -> 1 + loop (tail)
         | [] -> 0
     loop list
+
+
+
+
+
+
+type Shape = 
+    | Circle of Radius : float
+    | Square of SideLength : float
+    | Rectangle of LongSide : float * ShortSide : float
+//    | Line
+
+
+let calcArea shape = 
+    match shape with
+    | Circle (r) -> System.Math.PI * r * r
+    | Square (s) -> s * s
+    | Rectangle (l, s) -> s * l

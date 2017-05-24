@@ -8,6 +8,5 @@ FirstClear.GetSample()
 
 let data = FirstClear.Load("C:\\working\\demo\\data\\SomeDataFile.csv")
 
-let firstRow = data.Rows |> Seq.head
+let firstRow = data.Rows
 
-//firstRow

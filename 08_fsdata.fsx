@@ -2,11 +2,12 @@
 
 open FSharp.Data
 
-type FirstClear = CsvProvider<"Path/To/SampleDataFile.csv">
+type FirstClear = CsvProvider<"C:\\working\\demo\\data\\SampleDataFile.csv">
 
-// FirstClear.GetSample()
-// let data = FirstClear.Load("Path/To/FullDataFile.csv")
+FirstClear.GetSample()
 
-//let firstRow = data.Rows |> seq.Head
+let data = FirstClear.Load("C:\\working\\demo\\data\\SomeDataFile.csv")
+
+let firstRow = data.Rows |> Seq.head
 
 //firstRow

@@ -9,10 +9,6 @@ type Game = { Id: int; HomeTeam: string; HomeScore: int; VisitingTeam: string; V
 type StandingsLine = { Team: string; Wins: int; Losses: int; Ties: int }
 
 
-
-
-
-
 let divisionToCalendarUrlMap =
     Map.empty.
         Add(Rookies, "https://calendar.google.com/calendar/ical/ngssa.org_84gvlulr7vsnssbr0sqil5gpio%40group.calendar.google.com/public/full.ics").

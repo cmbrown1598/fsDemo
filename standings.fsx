@@ -95,10 +95,25 @@ let getCompleteStandings games =
         List.reduce combineLists |>
         List.sortBy standingsVal
 
-let showStandings division = 
-    let games = downloadCalendar divisionToCalendarUrlMap.[division]
+let getDivisionGames division = 
+    downloadCalendar divisionToCalendarUrlMap.[division]
                     |> Array.map parseGame
                     |> Array.filter (fun opt -> opt <> None)
                     |> Array.map Option.get
                     |> List.ofArray 
-    getCompleteStandings games
+
+let showStandings division = 
+    getDivisionGames division
+        |> getCompleteStandings
+
+let renderAsCsv game = 
+    sprintf "%i,%s,%i,%s,%i" game.Id game.HomeTeam game.HomeScore game.VisitingTeam game.VisitorsScore
+
+let csv division fileName = 
+    let header = sprintf "Id,Home,HomeScore,Visitors,VisitorScore" 
+    let games = getDivisionGames division 
+                    |> List.map renderAsCsv
+    let arr = header::games
+                    |> Array.ofList
+    IO.File.WriteAllText(fileName, String.Join(Environment.NewLine, arr), Text.Encoding.UTF8)
+

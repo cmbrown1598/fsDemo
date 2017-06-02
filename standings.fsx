@@ -115,5 +115,5 @@ let csv division fileName =
                     |> List.map renderAsCsv
     let arr = header::games
                     |> Array.ofList
-    IO.File.WriteAllText(fileName, String.Join(Environment.NewLine, arr), Text.Encoding.UTF8)
+    IO.File.WriteAllLines(fileName, arr, Text.Encoding.UTF8)
 

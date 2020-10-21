@@ -1,6 +1,8 @@
-let fn argument = 
-    let subfunction arg = 
-        let deeplyScoped = 
-            printfn arg
-        0
-subfunction "Christopher Brown"
+let fn parent = 
+    let subfunction subFunctionArgument = 
+        let deeplyScoped = printfn parent
+        subFunctionArgument
+    subfunction "Christopher Brown"
+
+fn "Nothing"
+

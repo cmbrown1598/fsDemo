@@ -1,4 +1,4 @@
-#r @"C:\working\demo\packages\FSharp.Data\lib\net40\FSharp.Data.dll"
+#r @"nuget: FSharp.Data"
 
 open FSharp.Data
 

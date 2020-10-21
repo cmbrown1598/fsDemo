@@ -1,5 +1,3 @@
-
-
 let greet name = 
     let hr = System.DateTime.Now.Hour
     if hr < 12 then sprintf "Good morning %s!" name
